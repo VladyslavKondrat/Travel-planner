@@ -22,3 +22,4 @@ A CRUD application built with Django REST Framework for planning travel projects
 2. **Build and start the container:**
    ```bash
    docker-compose up --build
+   http://localhost:8000/api/docs/

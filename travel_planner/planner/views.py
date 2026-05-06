@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Project, Place
 from .serializers import ProjectSerializer, PlaceSerializer
+from rest_framework.views import APIView
+import requests
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all().prefetch_related('places')
@@ -38,3 +40,27 @@ class PlaceViewSet(viewsets.ModelViewSet):
             raise ValidationError({"detail": "This project already has the maximum of 10 places."})
             
         serializer.save(project_id=project_id)
+
+
+class ArtSearchAPIView(APIView):
+    """
+    Acts as a proxy to search the Art Institute of Chicago API.
+    Example: /api/art-search/?q=Monet
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        search_query = request.query_params.get('q', '')
+        
+        url = "https://api.artic.edu/api/v1/artworks/search"
+        params = {
+            'q': search_query,
+            'limit': 10,
+            'fields': 'id,title,artist_display'
+        }
+        
+        response = requests.get(url, params=params)
+        
+        if response.status_code == 200:
+            return Response(response.json())
+        return Response({"error": "Failed to fetch from external API"}, status=response.status_code)

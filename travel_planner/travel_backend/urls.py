@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from planner.views import ProjectViewSet, PlaceViewSet
+from planner.views import ProjectViewSet, PlaceViewSet, ArtSearchAPIView
 
 project_list = ProjectViewSet.as_view({'get': 'list', 'post': 'create'})
 project_detail = ProjectViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})
@@ -40,4 +40,7 @@ urlpatterns = [
     #OpenAPI 3 Documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+
+    #API
+    path('api/art-search/', ArtSearchAPIView.as_view(), name='art-search'),
 ]
