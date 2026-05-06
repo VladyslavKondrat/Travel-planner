@@ -1,0 +1,15 @@
+# Ignore local virtual environments (uv creates a .venv folder by default)
+.venv/
+env/
+venv/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore local SQLite databases (you want the container to start fresh)
+db.sqlite3
+
+# Ignore Git history
+.git/
